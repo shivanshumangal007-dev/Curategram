@@ -1,6 +1,6 @@
 import prisma from "../DB/db.connection.js";
 import bcrypt from "bcrypt";
-
+import jwt from "jsonwebtoken";
 const registerController = async (req, res) => {
 	const { username, email, password, gender } = req.body;
 	const ExistingUser = await prisma.user.findMany({
@@ -51,7 +51,11 @@ const LoginController = async (req, res) => {
 	if (!result) {
 		return res.status(400).json({ message: "Invalid password" });
 	}
-	return res.status(200).json({ message: "Login successful", user });
+
+	const token = await jwt.sign({ id: user.id }, process.env.JWT_SECRET);
+
+	req.cookies.token = token;
+	return res.status(200).json({ message: "Login successful", user, token });
 };
 
 export { registerController, LoginController };
