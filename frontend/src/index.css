@@ -1,0 +1,32 @@
+@import "tailwindcss";
+
+
+
+/* logo */
+@font-face {
+  font-family: 'Boldonse';
+  src: url('Fonts/Boldonse-Regular.ttf') format('truetype');
+}
+
+/* normal */
+@font-face {
+  font-family: 'Geo';
+  src: url('Fonts/Geo-Regular.ttf') format('truetype');
+}
+
+/* something crazy */
+@font-face {
+  font-family: 'Saira'; 
+  src: url('Fonts/Saira.ttf') format('truetype');
+}
+
+*{
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+.logo{
+  font-family: 'Boldonse', sans-serif;
+  
+}
+.ai-chat{
+  font-family: 'Saira', sans-serif;
+}
