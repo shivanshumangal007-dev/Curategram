@@ -53,9 +53,30 @@ const LoginController = async (req, res) => {
 	}
 
 	const token = await jwt.sign({ id: user.id }, process.env.JWT_SECRET);
-
-	req.cookies.token = token;
+	res.cookie("token", token, {
+		httpOnly: true,
+		secure: false, // true in production https
+		sameSite: "lax",
+	});
 	return res.status(200).json({ message: "Login successful", user, token });
 };
 
-export { registerController, LoginController };
+const meControler = (req, res) => {
+	const token = req.cookies.token;
+
+	if (!token) {
+		return res.status(401).json({ message: "Unauthorized" });
+	}
+
+	try {
+		const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+		return res.json({
+			user: decoded,
+		});
+	} catch {
+		return res.status(401).json({ message: "Invalid token" });
+	}
+};
+
+export { registerController, LoginController, meControler };

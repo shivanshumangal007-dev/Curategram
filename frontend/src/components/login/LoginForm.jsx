@@ -1,8 +1,25 @@
 import React, { useState } from "react";
 import { motion } from "motion/react";
+import apiClient from "../../utils/apiClient.js";
+import { useNavigate } from "react-router-dom";
+
 const LoginForm = () => {
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
+	const [error, setError] = useState(null);
+	const navigate = useNavigate();
+	const handleLogin = async () => {
+		try {
+			const response = await apiClient.post("/user/", { email: username, password });
+			localStorage.setItem("user", JSON.stringify(response.data.user));
+			localStorage.setItem("token", response.data.token);
+			setError(null);
+			navigate('/');
+		} catch (error) {
+			setError(error.response.data.message || "An error occurred during login");
+			console.error("Login error:", error);
+		}
+	}
 	return (
 		<motion.div
 			initial={{ scale: 0.95 }}
@@ -21,17 +38,18 @@ const LoginForm = () => {
 				placeholder='username'
 				value={username}
 				onChange={(e) => setUsername(e.target.value)}
-				className='border border-black rounded-lg p-2 focus:outline-none capitalize'
+				className='border border-black rounded-lg p-2 focus:outline-none '
 			/>
 			<input
 				type='password'
 				placeholder='password'
 				value={password}
 				onChange={(e) => setPassword(e.target.value)}
-				className='border border-black rounded-lg p-2 focus:outline-none capitalize'
+				className='border border-black rounded-lg p-2 focus:outline-none '
 			/>
 			<motion.button
 				className='bg-black text-white rounded-lg py-2 transition duration-300 cursor-pointer border border-black'
+				onClick={handleLogin}
 			>
 				Login / Register
 			</motion.button>
