@@ -8,7 +8,7 @@ datasource db {
 }
 
 model SavedItem {
-  id          String   @id
+  id          String   @id @default(uuid()) @unique
   title       String
   description String?
   imageUrl    String?
@@ -20,7 +20,7 @@ model SavedItem {
 }
 
 model User {
-  id        String   @id @default(uuid())
+  id        String   @id @default(uuid()) @unique
   email     String   @unique
   username  String   @unique
   password  String
